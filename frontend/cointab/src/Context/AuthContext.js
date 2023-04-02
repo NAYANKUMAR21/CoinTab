@@ -14,7 +14,7 @@ const AuthContextProvider = ({ children }) => {
   const LoginFn = async (cred) => {
     try {
       const loginUser = await axios.post(
-        'http://localhost:8080/auth/login',
+        'https://cointab-oovr.onrender.com/auth/login',
         cred
       );
       console.log(loginUser);
@@ -36,7 +36,7 @@ const AuthContextProvider = ({ children }) => {
   };
   const SignupFn = async (cred) => {
     try {
-      await axios.post('http://localhost:8080/auth/signup', cred);
+      await axios.post('https://cointab-oovr.onrender.com/auth/signup', cred);
 
       setSignIn(true);
       localStorage.setItem('siggnedIn', true);

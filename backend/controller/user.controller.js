@@ -40,12 +40,9 @@ async function Login(req, res) {
       } else {
         if (checkUser.loginAttempts >= 4) {
           if (checkUser.lockUntil && checkUser.lockUntil >= Date.now()) {
-            return res
-              .status(404)
-              .send({
-                message:
-                  'Login after 24hrs no. of Attempts exceeded more than 5',
-              });
+            return res.status(404).send({
+              message: 'Login after 24hrs no. of Attempts exceeded 5',
+            });
           } else if (checkUser.lockUntil && checkUser.lockUntil <= Date.now()) {
             await userModel.findByIdAndUpdate(
               { _id: checkUser._id },
@@ -97,13 +94,13 @@ async function Signup(req, res) {
   const { email, password, name } = req.body;
   try {
     const checkUser = await userModel.findOne({ email: email });
-    console.log(checkUser);
+    // console.log(checkUser);
     if (checkUser) {
       return res.status(404).send({ message: 'User already existed' });
     }
     bcrypt.hash(password, 10, async function (err, hash) {
       if (err) {
-        console.log(err.message);
+        // console.log(err.message);
         return res.status(404).send({ message: 'Something Went Wrong !' });
       }
       //create User
