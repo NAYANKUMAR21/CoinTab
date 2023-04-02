@@ -40,7 +40,12 @@ async function Login(req, res) {
       } else {
         if (checkUser.loginAttempts >= 4) {
           if (checkUser.lockUntil && checkUser.lockUntil >= Date.now()) {
-            return res.status(404).send({ message: 'Login after 1min' });
+            return res
+              .status(404)
+              .send({
+                message:
+                  'Login after 24hrs no. of Attempts exceeded more than 5',
+              });
           } else if (checkUser.lockUntil && checkUser.lockUntil <= Date.now()) {
             await userModel.findByIdAndUpdate(
               { _id: checkUser._id },
@@ -54,7 +59,7 @@ async function Login(req, res) {
               Attempted: 1,
             });
           }
-          let exceedADay = 60 * 1000;
+          let exceedADay = 24 * 60 * 60 * 1000;
           const date = Date.now() + exceedADay;
           await userModel.findByIdAndUpdate(
             { _id: checkUser._id },

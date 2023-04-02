@@ -11,13 +11,16 @@ import {
   Button,
   Heading,
   Text,
+  useToast,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { NavLink, Navigate } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
+
 export default function SignupCard() {
+  let toast = useToast();
   const { SigninState, LoginFn, SignupFn, LogoutFn } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [cred, setCred] = useState({ name: '', email: '', password: '' });
@@ -27,6 +30,26 @@ export default function SignupCard() {
   };
   const handleSubmit = () => {
     console.log({ LoginFn, SignupFn, LogoutFn }, cred);
+    const { password } = cred;
+    if (password && password.length < 8) {
+      if (password.includes(' ')) {
+        return toast({
+          title: 'Password.',
+          description: 'Charcaters should not have spaces included',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+      return toast({
+        title: 'Password.',
+        description: 'Charcaters should be of 8 and not spaces included',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
     SignupFn(cred);
     return;
   };
